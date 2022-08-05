@@ -8,10 +8,10 @@
     <main>
       <NavBar />
       <section class="filme-info pure-white">
-        <div v-show="selectedMovie">
+        <div v-if="selectedMovie">
           <div>
             <p>categorias</p>
-            <h1>Titulo</h1>
+            <h1>{{ selectedMovie.title }}</h1>
             <span> AVALIACAO ***** duracao</span>
           </div>
 
@@ -123,11 +123,14 @@ export default {
               name: item.name,
               movies: response.data
             })
-            self.selectedMovie = response.data.results[0]
+          })
+          .then(function () {
+            const movie = self.movies[0].movies.results[0]
+            self.selectedMovie = movie
             if (self.windowWidth === 'mobile') {
-              self.poster = response.data.results[0].poster_path
+              self.poster = movie.poster_path
             } else if (self.windowWidth === 'desktop') {
-              self.poster = response.data.results[0].backdrop_path
+              self.poster = movie.backdrop_path
             }
           })
           .catch(function (error) {
