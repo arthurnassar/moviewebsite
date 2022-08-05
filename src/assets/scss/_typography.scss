@@ -1,0 +1,44 @@
+// VARIABLES
+$colors: (
+    'pure-dark': #0D0D0D,
+    'orange-light': #FF6B00,
+    'footer-bg': #121212,
+    'title-gray': #F0ECEC,
+    'content-gray': #D0CCCC,
+    'pure-white': #ffffff
+);
+
+$font-sizes: (
+    'fs-12': 12,
+    'fs-16': 16,
+    'fs-24': 24,
+    'fs-32': 32,
+    'fs-48': 48,
+    'fs-64': 64,
+    'fs-128': 128,
+);
+
+// MIXINS
+@mixin font-size ($size) {
+    font-size: #{$size}px;
+}
+@mixin font-family () {
+    font-family: 'Roboto', sans-serif;
+}
+@mixin color ($color) {
+    color: $color !important;
+}
+
+// CREATING FONT-SIZE CLASSES
+@each $value, $name in $font-sizes {
+        .fs-#{$name} {
+                @include font-size ($name);
+                @include font-family ();
+            }
+}
+
+@each $value, $name in $colors {
+    .#{$value} {
+        @include color ($name);
+    }
+}
