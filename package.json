@@ -1,14 +1,11 @@
 {
-  "name": "my-webpack-project",
+  "name": "MOVIER",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "webpack --mode=production --node-env=production",
-    "lint": "vue-cli-service lint",
-    "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
-    "watch": "webpack --watch"
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "axios": "^0.27.2",
@@ -66,5 +63,5 @@
     "not dead",
     "not ie 11"
   ],
-  "description": "My webpack project"
+  "description": "Projeto de site para visualização de filmes"
 }
