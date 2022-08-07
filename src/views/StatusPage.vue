@@ -45,6 +45,13 @@
           :arrayData="arrayData"
           :chartId="sentId"
         ></D3Chart>
+
+        <div v-if="arrayData">
+          <MoviesCarousel
+            genreName="Mais votados"
+            :movies="arrayData"
+          ></MoviesCarousel>
+        </div>
       </section>
     </main>
   </div>
@@ -54,12 +61,14 @@
 import NavBar from '@/components/NavBar.vue'
 import D3Chart from '@/components/D3Chart.vue'
 import axios from 'axios'
+import MoviesCarousel from '@/components/MoviesCarousel.vue'
 
 export default {
   name: 'HomeView',
   components: {
     NavBar,
-    D3Chart
+    D3Chart,
+    MoviesCarousel
   },
   data () {
     return {
@@ -128,17 +137,81 @@ export default {
 </script>
 
 <style lang="scss">
-button {
-  border-radius: 5px;
+.about {
+  background-size: contain;
+  background-repeat: no-repeat;
+  color: rgba(71, 71, 71, 0.52);
+  padding: 0px max(10px, 5%);
+
+  main {
+    max-width: 1800px;
+    margin: 0 auto;
+
+    * {
+      margin: 0;
+    }
+
+    .navbar {
+      margin-bottom: min(5%, 200px);
+      & .collapse {
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        width: 200px !important;
+        top: 100px;
+
+        .logout-item {
+          div#collapseExample {
+            position: relative !important;
+            top: 0 !important;
+            width: 100px !important;
+          }
+        }
+      }
+      & .collapsing {
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        width: 200px !important;
+        top: 100px;
+      }
+    }
+
+    .filme-info {
+      .title-info {
+        .star-container {
+          display: flex;
+          flex-direction: row;
+          gap: 5px;
+          align-items: center;
+
+          p {
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+
+    .movies-container {
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
 }
 
-button.pressed {
-  box-shadow: inset 0px 03px 6px 0px rgba(255, 255, 255, 0.62);
-  background-color: #5c5b5b !important;
-  color: white;
-}
-
-button:active {
-  background: rgba(255, 255, 255, 0.705);
+@media screen and (min-width: 990px) {
+  main {
+    .navbar {
+      .collapse {
+        position: initial !important;
+      }
+      .collapsing {
+        position: initial !important;
+      }
+    }
+  }
 }
 </style>
