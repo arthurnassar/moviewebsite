@@ -1,6 +1,13 @@
 <template>
   <div
-    class="wrapper d-flex justify-content-center align-items-center"
+    class="
+      wrapper
+      d-flex
+      flex-column
+      my-4
+      justify-content-center
+      align-items-center
+    "
     v-if="arrayData"
   >
     <div id="chartContainer" class="text-white">
@@ -53,8 +60,6 @@ export default {
           .range([25, 975])
           .padding(0.2)
 
-        console.log(scaleX(0))
-
         const Tooltip = d3
           .select('#div_template')
           .append('div')
@@ -71,7 +76,6 @@ export default {
           d3.select(this).style('stroke', 'black').style('opacity', 1)
         }
         const mousemove = function (event, d) {
-          console.log()
           Tooltip.html(
             `Nome: ${d.name} <br> Nota: ${d.vote_average} <br> Votos: ${d.vote_count}`
           )
@@ -90,13 +94,20 @@ export default {
           .data(this.arrayData)
           .join('rect')
           .attr('x', (d, i) => scaleX(i))
-          .attr('y', (d) => scaleY(d.vote_average))
-          .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
+          .attr('y', (d) => scaleY(0))
+          .attr('height', (d) => 0)
           .attr('width', (d) => scaleX.bandwidth())
           .attr('class', 'bars')
           .on('mouseover', mouseover)
           .on('mousemove', mousemove)
           .on('mouseleave', mouseleave)
+          .transition()
+          .delay((d, i) => {
+            return i * 50
+          })
+          .duration(800)
+          .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
+          .attr('y', (d) => scaleY(d.vote_average))
 
         const yAxis = d3
           .axisLeft()
@@ -125,16 +136,14 @@ export default {
           .select('#chartContainer')
           .append('svg')
           .attr('width', 310)
-          .attr('height', 210)
+          .attr('height', 200)
           .attr('viewBox', [0, 0, 310, 210])
         scaleY = d3.scaleLinear().domain([0, 10]).range([190, 10])
         scaleX = d3
           .scaleBand()
           .domain(d3.range(10))
-          .range([10, 290])
+          .range([10, 300])
           .padding(0.2)
-
-        console.log(scaleX(0))
 
         const Tooltip = d3
           .select('#div_template')
@@ -152,7 +161,6 @@ export default {
           d3.select(this).style('stroke', 'black').style('opacity', 1)
         }
         const mousemove = function (event, d) {
-          console.log(d)
           Tooltip.html(
             `Nome: ${d.name} <br> Nota: ${d.vote_average} <br> Votos: ${d.vote_count}`
           )
@@ -171,13 +179,20 @@ export default {
           .data(this.arrayData)
           .join('rect')
           .attr('x', (d, i) => scaleX(i))
-          .attr('y', (d) => scaleY(d.vote_average))
-          .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
+          .attr('y', (d) => scaleY(0))
+          .attr('height', (d) => 0)
           .attr('width', (d) => scaleX.bandwidth())
           .attr('class', 'bars')
           .on('mouseover', mouseover)
           .on('mousemove', mousemove)
           .on('mouseleave', mouseleave)
+          .transition()
+          .delay((d, i) => {
+            return i * 50
+          })
+          .duration(800)
+          .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
+          .attr('y', (d) => scaleY(d.vote_average))
 
         const yAxis = d3
           .axisLeft()
@@ -225,8 +240,6 @@ export default {
           .range([25, 975])
           .padding(0.2)
 
-        console.log(scaleX(0))
-
         const Tooltip = d3
           .select('#div_template')
           .append('div')
@@ -243,7 +256,6 @@ export default {
           d3.select(this).style('stroke', 'black').style('opacity', 1)
         }
         const mousemove = function (event, d) {
-          console.log(d)
           Tooltip.html(
             `Nome: ${d.title} <br> Nota: ${d.vote_average} <br> Votos: ${d.vote_count}`
           )
@@ -262,13 +274,20 @@ export default {
           .data(this.arrayData)
           .join('rect')
           .attr('x', (d, i) => scaleX(i))
-          .attr('y', (d) => scaleY(d.vote_average))
-          .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
+          .attr('y', (d) => scaleY(0))
+          .attr('height', (d) => 0)
           .attr('width', (d) => scaleX.bandwidth())
           .attr('class', 'bars')
           .on('mouseover', mouseover)
           .on('mousemove', mousemove)
           .on('mouseleave', mouseleave)
+          .transition()
+          .delay((d, i) => {
+            return i * 50
+          })
+          .duration(800)
+          .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
+          .attr('y', (d) => scaleY(d.vote_average))
 
         const yAxis = d3
           .axisLeft()
@@ -297,7 +316,7 @@ export default {
           .select('#chartContainer')
           .append('svg')
           .attr('width', 310)
-          .attr('height', 210)
+          .attr('height', 200)
           .attr('viewBox', [0, 0, 310, 210])
         scaleY = d3.scaleLinear().domain([0, 10]).range([190, 10])
         scaleX = d3
@@ -305,8 +324,6 @@ export default {
           .domain(d3.range(10))
           .range([10, 290])
           .padding(0.2)
-
-        console.log(scaleX(0))
 
         const Tooltip = d3
           .select('#div_template')
@@ -324,7 +341,6 @@ export default {
           d3.select(this).style('stroke', 'black').style('opacity', 1)
         }
         const mousemove = function (event, d) {
-          console.log(d)
           Tooltip.html(
             `Nome: ${d.title} <br> Nota: ${d.vote_average} <br> Votos: ${d.vote_count}`
           )
@@ -343,13 +359,20 @@ export default {
           .data(this.arrayData)
           .join('rect')
           .attr('x', (d, i) => scaleX(i))
-          .attr('y', (d) => scaleY(d.vote_average))
-          .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
+          .attr('y', (d) => scaleY(0))
+          .attr('height', (d) => 0)
           .attr('width', (d) => scaleX.bandwidth())
           .attr('class', 'bars')
           .on('mouseover', mouseover)
           .on('mousemove', mousemove)
           .on('mouseleave', mouseleave)
+          .transition()
+          .delay((d, i) => {
+            return i * 50
+          })
+          .duration(800)
+          .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
+          .attr('y', (d) => scaleY(d.vote_average))
 
         const yAxis = d3
           .axisLeft()
@@ -375,12 +398,6 @@ export default {
         svg.node()
       }
     },
-    onMouseOut (event) {
-      console.log(event.target)
-    },
-    onMouseOver (event) {
-      console.log(event.target)
-    },
     updateWindowWidth () {
       if (window.innerWidth >= 600) {
         this.windowWidth = 'desktop'
@@ -391,6 +408,7 @@ export default {
   },
   updated () {
     d3.select('#chartContainer').select('svg').remove()
+    console.log(this.arrayData)
 
     if (this.chartId === 'movie') {
       this.renderMovieChart()
@@ -415,6 +433,9 @@ export default {
   justify-content: center;
   align-items: center;
 
+  .bars {
+    transition: all ease 2s;
+  }
   .bars:hover {
     fill: #ff8b39;
   }

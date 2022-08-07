@@ -26,12 +26,24 @@
             </button>
           </div>
         </div>
+        <div class="d-flex justify-content-end my-3 text-white">
+          <p class="mx-4">Filtrar:</p>
+          <button id="nota" class="filtro" @click="filtrar('nota')">
+            Por notas
+          </button>
+          <button id="voto" class="filtro" @click="filtrar('voto')">
+            Por votos
+          </button>
+          <button id="tudo" class="filtro" @click="filtrar('tudo')">
+            Por notas mais votadas
+          </button>
+        </div>
         <D3Chart
           v-if="arrayData"
           :width="1000"
           :heigth="500"
           :arrayData="arrayData"
-          :chartId="idType"
+          :chartId="sentId"
         ></D3Chart>
       </section>
     </main>
@@ -52,38 +64,81 @@ export default {
   data () {
     return {
       idType: 'selected',
-      arrayData: null
+      arrayData: null,
+      filtro: ''
     }
   },
   methods: {
+    filtrar (botao) {
+      const todosBotoes = document.querySelectorAll('.filtro')
+      todosBotoes.forEach((item) => {
+        item.classList.remove('pressed')
+      })
+      const botaoClicado = document.querySelector(`#${botao}`)
+      botaoClicado.classList.add('pressed')
+
+      this.filtro = botao
+    },
     handleArrayDataResponse (data) {
       const top10 = []
-      let teste = 10
       for (let i = 0; i < 10; i++) {
-        if (data[i].vote_average * 10 > data[i + 1].vote_average * 10) {
-          teste--
-        }
-        data[i].finalNumber = teste
         top10.push(data[i])
       }
-      this.arrayData = top10
+      switch (this.filtro) {
+        case 'tudo':
+          this.arrayData = top10.sort((a, b) => {
+            if (a.vote_average === b.vote_average) {
+              return b.vote_count - a.vote_count
+            }
+
+            return b.vote_average - a.vote_averageW
+          })
+          console.log(this.arrayData)
+          break
+        case 'voto':
+          this.arrayData = top10.sort((a, b) => b.vote_count - a.vote_count)
+          break
+
+        case 'nota':
+          this.arrayData = top10
+          break
+      }
     },
     getTopRated () {
-      const self = this
-      axios
-        .get(
-          `https://api.themoviedb.org/3/${this.idType}/top_rated?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&language=pt-BR&page=1`
-        )
-        .then(function (response) {
-          self.handleArrayDataResponse(response.data.results)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+      if (this.filtro) {
+        const self = this
+        axios
+          .get(
+            `https://api.themoviedb.org/3/${this.idType}/top_rated?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&language=pt-BR&page=1`
+          )
+          .then(function (response) {
+            self.handleArrayDataResponse(response.data.results)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+
+        this.sentId = this.idType
+      } else {
+        alert('Por favor selecione o filtro desejado')
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
+button {
+  border-radius: 5px;
+}
+
+button.pressed {
+  box-shadow: inset 0px 03px 6px 0px rgba(255, 255, 255, 0.62);
+  background-color: #5c5b5b !important;
+  color: white;
+}
+
+button:active {
+  background: rgba(255, 255, 255, 0.705);
+}
 </style>
