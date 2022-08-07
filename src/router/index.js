@@ -12,7 +12,7 @@ const routes = [
     }
   },
   {
-    path: 'moviewebsite/',
+    path: '/moviewebsite',
     name: 'home',
     component: HomeView,
     meta: {
