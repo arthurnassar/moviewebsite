@@ -159,6 +159,7 @@ section {
   display: flex;
   flex-direction: column;
   gap: 20px;
+
   .genre {
     &-name {
       color: white;
@@ -174,8 +175,10 @@ section {
   }
   #wrapper {
     position: relative;
-    overflow: hidden;
+    overflow: hidden !important;
     border-radius: 15px;
+    width: 100% !important;
+    max-width: 1800px !important;
 
     #inner {
       width: fit-content;
@@ -188,54 +191,21 @@ section {
         transition: all ease 1s;
       }
 
-      MovieCards {
-        &.loading {
-          display: inline-block;
-          position: relative;
-          width: 80px;
-          height: 80px;
-        }
-        &.loading:after {
-          content: " ";
-          display: block;
-          border-radius: 50%;
-          width: 0;
-          height: 0;
-          margin: 8px;
-          box-sizing: border-box;
-          border: 32px solid #fff;
-          border-color: #fff transparent #fff transparent;
-          animation: lds-hourglass 1.2s infinite;
-        }
-        @keyframes lds-hourglass {
-          0% {
-            transform: rotate(0);
-            animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-          }
-          50% {
-            transform: rotate(900deg);
-            animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-          }
-          100% {
-            transform: rotate(1800deg);
-          }
-        }
+      .fadeEffect {
+        pointer-events: none;
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(9, 9, 121, 0) 50%,
+          rgba(0, 0, 0, 0.6) 70%,
+          rgba(0, 0, 0, 0.9) 90%
+        );
+        width: 300px;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
       }
-    }
-    .fadeEffect {
-      pointer-events: none;
-      background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(9, 9, 121, 0) 50%,
-        rgba(0, 0, 0, 0.6) 70%,
-        rgba(0, 0, 0, 0.9) 90%
-      );
-      width: 300px;
-      height: 100%;
-      position: absolute;
-      right: 0;
-      top: 0;
     }
   }
 }

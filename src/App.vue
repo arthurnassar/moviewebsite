@@ -15,7 +15,7 @@ export default {
 <style lang="scss">
 #app {
   background: #0d0d0d;
-
+  padding-bottom: 20px;
   NavBar {
     position: static;
   }
