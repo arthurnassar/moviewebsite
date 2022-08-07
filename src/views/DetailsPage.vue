@@ -6,7 +6,7 @@
     }"
   >
     <main>
-      <NavBar :noSearch="true" @filme-procurado="handleSearch($event)" />
+      <NavBar :noSearch="true" />
 
       <VideoContainer :site="site" :videoKey="videoKey"></VideoContainer>
 
