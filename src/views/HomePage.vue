@@ -6,33 +6,41 @@
     }"
   >
     <main>
-      <NavBar />
+      <NavBar @filme-procurado="handleSearch($event)" />
       <section class="filme-info pure-white">
         <div v-if="selectedMovie">
-          <div>
-            <p>categorias</p>
+          <div class="title-info">
+            <p>{{ displayGenres }}</p>
             <h1>{{ selectedMovie.title }}</h1>
-            <span> AVALIACAO ***** duracao</span>
+            <StarRating
+              :voteAverage="selectedMovie.vote_average"
+              :runTime="selectedMovie.runtime"
+            ></StarRating>
           </div>
 
           <div class="overview">
-            <p class="orange-light">overview</p>
-            <p>DESCRICAO DO FILME OU SERIE</p>
-            <p>alguma frase se tiver alinhada a direita</p>
+            <p class="orange-light"><strong>overview</strong></p>
+            <p class="fs-12">{{ selectedMovie.overview }}</p>
+            <template v-if="selectedMovie.tagline">
+              <p class="text-right">
+                <small>
+                  <em> "{{ selectedMovie.tagline }}" </em>
+                </small>
+              </p>
+            </template>
           </div>
 
-          <router-link class="orange-light fs-12" to=""
-            >Descubra mais LINK PARA O SITE DE DETALHES</router-link
+          <router-link
+            class="orange-light fs-12"
+            :to="{
+              name: 'details',
+              params: { type: 'movie', id: selectedMovie.id },
+            }"
+            ><u>Descubra mais ...</u></router-link
           >
         </div>
-        <template v-if="genres && !movies">
-          <MoviesCarousel
-            v-for="genre in genres"
-            :key="genre.id"
-            :genreName="genre.name"
-          ></MoviesCarousel>
-        </template>
-        <template v-else-if="movies">
+
+        <div class="movies-container">
           <MoviesCarousel
             @filme-selecionado="selecionarFilme($event)"
             v-for="movie in movies"
@@ -40,10 +48,7 @@
             :genreName="movie.name"
             :movies="movie.movies.results"
           ></MoviesCarousel>
-        </template>
-        <template v-else>
-          <p class="text-white">CARREGANDO</p>
-        </template>
+        </div>
       </section>
     </main>
   </div>
@@ -54,12 +59,14 @@ import NavBar from '@/components/NavBar.vue'
 import router from '@/router'
 import axios from 'axios'
 import MoviesCarousel from '@/components/MoviesCarousel.vue'
+import StarRating from '@/components/StarRating.vue'
 
 export default {
   name: 'HomeView',
   components: {
     NavBar,
-    MoviesCarousel
+    MoviesCarousel,
+    StarRating
   },
   data () {
     return {
@@ -71,19 +78,60 @@ export default {
     }
   },
   computed: {
+    displayGenres () {
+      if (this.selectedMovie.genres) {
+        const genresList = this.selectedMovie.genres
+        const result = genresList.map((item) => {
+          return item.name
+        })
+        return result.join(', ')
+      } else if (this.selectedMovie.genres_ids) {
+        const genresList = this.selectedMovie.genres_ids
+        const result = genresList.map((item) => {
+          return item.name
+        })
+        return result.join(', ')
+      } else {
+        return ''
+      }
+    },
+
     returnBackground () {
-      return ` linear-gradient(to bottom, rgba(71, 71, 71, 0.76), rgba(71, 71, 71, 0.76)),
+      return ` linear-gradient(to bottom, rgba(0, 0, 0, 0.76), rgba(0, 0, 0, 0.76)),
     url(https://image.tmdb.org/t/p/original${this.poster})`
     }
   },
   watch: {
     genres () {
-      this.getMoviesByGenre(this.genres)
+      this.getMoviesByGenre(this.genres, this.counter)
     }
   },
   methods: {
+    handleSearch (event) {
+      const movie = event[0].movies.results[0]
+      if (event[0].movies.results.length !== 0) {
+        this.movies = event
+        this.selectedMovie = movie
+        if (this.windowWidth === 'mobile') {
+          this.poster = movie.poster_path
+        } else if (this.windowWidth === 'desktop') {
+          this.poster = movie.backdrop_path
+        }
+      }
+    },
     selecionarFilme (event) {
-      this.selectedMovie = event
+      const id = event.id
+      const self = this
+      axios
+        .get(
+          `https://api.themoviedb.org/3/movie/${id}?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&language=pt-BR`
+        )
+        .then(function (response) {
+          self.selectedMovie = response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
       if (this.windowWidth === 'mobile') {
         this.poster = event.poster_path
       } else if (this.windowWidth === 'desktop') {
@@ -109,49 +157,62 @@ export default {
         })
     },
     getMoviesByGenre (array) {
-      array.forEach((item) => {
-        const id = item.id
-        const self = this
-
-        axios
-          .get(
-            `https://api.themoviedb.org/3/discover/movie?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${id}&with_watch_monetization_types=flatrate`
-          )
-          .then(function (response) {
-            self.movies.push({
-              id: item.id,
-              name: item.name,
-              movies: response.data
+      const temp = []
+      const promise = new Promise(function (resolve, reject) {
+        array.forEach((item) => {
+          const id = item.id
+          axios
+            .get(
+              `https://api.themoviedb.org/3/discover/movie?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${id}&with_watch_monetization_types=flatrate`
+            )
+            .then(function (response) {
+              temp.push({
+                id: item.id,
+                name: item.name,
+                movies: response.data
+              })
             })
-          })
-          .then(function () {
-            const movie = self.movies[0].movies.results[0]
-            self.selectedMovie = movie
-            if (self.windowWidth === 'mobile') {
-              self.poster = movie.poster_path
-            } else if (self.windowWidth === 'desktop') {
-              self.poster = movie.backdrop_path
-            }
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+            .then(function () {
+              resolve(temp)
+            })
+            .catch(function (error) {
+              console.log(error)
+              reject(error)
+            })
+        })
+      })
+      promise.then((temp) => {
+        console.log(temp)
+        this.movies = temp
+        const movie = this.movies[0].movies.results[0]
+        this.selecionarFilme(movie)
+        if (this.windowWidth === 'mobile') {
+          this.poster = movie.poster_path
+        } else if (this.windowWidth === 'desktop') {
+          this.poster = movie.backdrop_path
+        }
       })
     },
     updateWindowWidth () {
       if (window.innerWidth >= 600) {
         this.windowWidth = 'desktop'
+        if (this.selectedMovie) {
+          this.poster = this.selectedMovie.backdrop_path
+        }
       } else {
         this.windowWidth = 'mobile'
+        if (this.selectedMovie) {
+          this.poster = this.selectedMovie.poster_path
+        }
       }
     }
   },
-  mounted () {
+  beforeCreate () {
     if (this.$route.query.approved === 'true') {
       this.$store.commit('setRequestToken', this.$route.query.request_token)
-      this.$store.dispatch('logInWithTMDB')
     }
-
+  },
+  mounted () {
     this.updateWindowWidth()
     window.addEventListener('resize', this.updateWindowWidth)
 
@@ -199,6 +260,30 @@ export default {
         right: 0;
         width: 200px !important;
         top: 100px;
+      }
+    }
+
+    .filme-info {
+      .title-info {
+        .star-container {
+          display: flex;
+          flex-direction: row;
+          gap: 5px;
+          align-items: center;
+
+          p {
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+
+    .movies-container {
+      height: 1000px;
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        display: none;
       }
     }
   }
