@@ -1,8 +1,16 @@
 <template>
   <section>
-    <div class="genre w-25">
-      <h2 class="genre-name">{{ genreName }}</h2>
-      <div class="underscore"></div>
+    <div v-if="movies" class="genre">
+      <template v-if="movies.length > 0">
+        <h2 class="genre-name">{{ genreName }}</h2>
+        <div class="underscore"></div>
+      </template>
+    </div>
+    <div v-else-if="crew" class="genre">
+      <template v-if="crew.length > 0">
+        <h2 class="genre-name">{{ genreName }}</h2>
+        <div class="underscore"></div>
+      </template>
     </div>
     <div id="wrapper">
       <div
@@ -19,11 +27,15 @@
             @mousedown="selectedMovie = movie"
           ></MovieCards>
         </template>
-        <template v-else>
+        <template v-else-if="crew">
           <MovieCards
             class="loading"
-            v-for="number in 10"
-            :key="number"
+            v-for="member in crew"
+            :key="member.id"
+            :poster="member.profile_path"
+            :castCharacter="member.character"
+            :castName="member.name"
+            :castDepartment="member.known_for_department"
           ></MovieCards>
         </template>
       </div>
@@ -37,7 +49,8 @@ import MovieCards from '@/components/MovieCards.vue'
 export default {
   props: {
     movies: Array,
-    genreName: String
+    genreName: String,
+    crew: Array
   },
   components: {
     MovieCards
@@ -106,9 +119,6 @@ export default {
         const innerSliderDiff =
           innerSliderInitialPosition +
           (innerSliderInitialPositionMobile - lastPosition)
-        console.log(innerSliderDiff)
-        console.log(parseInt(innerSlider.style.right.split('px')[0]))
-        console.log(innerSliderInitialPositionMobile - lastPosition)
         innerSlider.style.right = `${innerSliderDiff}px`
       })
       event.currentTarget.addEventListener('touchend', (e) => {
@@ -155,6 +165,8 @@ section {
     }
     .underscore {
       height: 1px;
+      margin: 0;
+      padding: 0;
       width: min(50%, 40px);
       margin-top: 5px;
       border-top: 3px solid #ff6b00;

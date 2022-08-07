@@ -22,6 +22,7 @@ export default createStore({
       localStorage.removeItem('auth_type')
       localStorage.removeItem('request_token')
       localStorage.removeItem('session_id')
+      window.location.href = domain + 'login'
     },
     setRequestToken (_state, token) {
       this.state.requestToken = token

@@ -16,11 +16,11 @@ const routes = [
     name: 'home',
     component: HomeView,
     meta: {
-      needsAuth: false
+      needsAuth: true
     }
   },
   {
-    path: '/details',
+    path: '/details/:id',
     name: 'details',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -82,10 +82,11 @@ router.beforeEach((to, from, next) => {
         next()
       }
     } else {
-      if (to.path !== '/login') {
-        console.log(to.path)
+      if (to.path !== '/login' && to.query.approved !== 'true') {
+        console.log(to)
+        console.log(from)
         alert('Usuario não autenticado, favor fazer login primeiro')
-        next('login')
+        next({ name: 'login' })
       } else {
         next()
       }

@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <nav class="navbar navbar-expand-lg">
-      <a class="navbar-brand orange-light" href="#">MOVIER</a>
+      <a class="navbar-brand orange-light" href="/">MOVIER</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -20,8 +20,11 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li>
-            <form class="form-inline my-2 my-lg-0">
+          <li v-if="!noSearch">
+            <form
+              @submit.prevent="submitSearchedValue($event)"
+              class="form-inline my-2 my-lg-0"
+            >
               <input
                 class="form-control mr-sm-2"
                 type="search"
@@ -55,13 +58,13 @@
             </form>
           </li>
           <li class="nav-item active">
-            <router-link class="nav-link" to="/"> Filmes </router-link>
+            <a class="nav-link" href="/"> Filmes </a>
           </li>
           <li class="nav-item active">
-            <router-link class="nav-link" to="/series"> Séries </router-link>
+            <a class="nav-link" href="/series"> Séries </a>
           </li>
           <li class="nav-item active">
-            <router-link class="nav-link" to="/status"> Status </router-link>
+            <a class="nav-link" href="/status"> Status </a>
           </li>
           <li class="nav-item active logout-item">
             <a
@@ -109,10 +112,49 @@
 
 <script>
 import router from '@/router'
+import axios from 'axios'
 
 export default {
   name: 'NavBar',
+  data () {
+    return {
+      searchedMovies: null
+    }
+  },
+  props: {
+    noSearch: Boolean
+  },
+  watch: {
+    searchedMovies () {
+      this.$emit('filmeProcurado', this.searchedMovies)
+    }
+  },
   methods: {
+    submitSearchedValue (event) {
+      const searchedValue = event.target.elements[0].value
+      const uppercaseLetter = searchedValue.split('').shift().toUpperCase()
+      const searchedValueUpperCase =
+        uppercaseLetter + searchedValue.split('').splice(1).join('')
+      if (searchedValue) {
+        const self = this
+        axios
+          .get(
+            `https://api.themoviedb.org/3/search/movie?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&language=pt-BR&query=${searchedValue}&page=1&include_adult=false`
+          )
+          .then(function (response) {
+            self.searchedMovies = [
+              {
+                id: 'searched',
+                name: `${searchedValueUpperCase}`,
+                movies: response.data
+              }
+            ]
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }
+    },
     logOut () {
       this.$store.commit('logOut')
 

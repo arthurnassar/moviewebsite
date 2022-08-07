@@ -1,6 +1,13 @@
 <template>
   <div class="card" :style="{ backgroundImage: fullPathImage }">
-    <p>{{ movieName }}</p>
+    <template v-if="castName || castCharacter || castDepartment">
+      <p v-if="castName && castCharacter">
+        {{ castName }} as {{ castCharacter }}
+      </p>
+      <p v-else>{{ castName }}</p>
+      <p>{{ castDepartment }}</p>
+    </template>
+    <p v-if="movieName">{{ movieName }}</p>
   </div>
 </template>
 
@@ -9,11 +16,14 @@ export default {
   name: 'MoviesCarousel',
   props: {
     poster: String,
-    movieName: String
+    movieName: String,
+    castName: String,
+    castCharacter: String,
+    castDepartment: String
   },
   computed: {
     fullPathImage () {
-      return `url(https://image.tmdb.org/t/p/original${this.poster})`
+      return ` linear-gradient(to bottom, rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.30)), url(https://image.tmdb.org/t/p/original${this.poster})`
     }
   }
 }

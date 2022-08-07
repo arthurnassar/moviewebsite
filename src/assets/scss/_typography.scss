@@ -20,7 +20,7 @@ $font-sizes: (
 
 // MIXINS
 @mixin font-size ($size) {
-    font-size: #{$size}px;
+    font-size: clamp(#{$size}px,  #{$size/12}vw, #{$size*3}px);
 }
 @mixin font-family () {
     font-family: 'Roboto', sans-serif;

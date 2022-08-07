@@ -7,6 +7,7 @@
     </button>
     <button @click="logInAsGuest">Log in as guest</button>
     <button @click="logInWithTMDB">Log in with TMDB</button>
+    <button @click="refreshToken">Token Inválido?</button>
   </div>
 </template>
 
@@ -20,6 +21,10 @@ export default {
     }
   },
   methods: {
+    refreshToken () {
+      localStorage.clear()
+      this.$router.go()
+    },
     authenticateUser () {
       // if (this.email && this.password) {
       //   this.$router.push({ path: '/' })
