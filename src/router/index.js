@@ -4,7 +4,7 @@ import HomeView from '../views/HomePage.vue'
 
 const routes = [
   {
-    path: '/login',
+    path: 'moviewebsite/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "about" */ '../views/LoginPage.vue'),
     meta: {
@@ -12,7 +12,7 @@ const routes = [
     }
   },
   {
-    path: '/',
+    path: 'moviewebsite/',
     name: 'home',
     component: HomeView,
     meta: {
@@ -20,7 +20,7 @@ const routes = [
     }
   },
   {
-    path: '/details/:id',
+    path: 'moviewebsite/details/:id',
     name: 'details',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -31,7 +31,7 @@ const routes = [
     }
   },
   {
-    path: '/status',
+    path: 'moviewebsite/status',
     name: 'status',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -42,7 +42,7 @@ const routes = [
     }
   },
   {
-    path: '/series',
+    path: 'moviewebsite/series',
     name: 'series',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
