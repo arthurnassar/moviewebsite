@@ -130,7 +130,10 @@ export default {
       if (!this.voteClicked) {
         this.voteClicked = true
         const id = this.$route.params.id
-        const idType = this.$route.params.type
+        let idType = localStorage.getItem('idType')
+        if (this.$route.params.type) {
+          idType = this.$route.params.type
+        }
         const value = {
           value: this.voteRate
         }
@@ -144,6 +147,7 @@ export default {
             .post(guestVote, value)
             .then((response) => {
               if (response.data.success) {
+                this.fillStars()
                 alert('Seu voto foi enviado ou atualizado com sucesso')
               }
             })

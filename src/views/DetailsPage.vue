@@ -298,7 +298,14 @@ export default {
     }
   },
   mounted () {
-    this.idType = this.$route.params.type
+    if (this.$route.params.type) {
+      this.idType = this.$route.params.type
+      localStorage.setItem('idType', this.idType)
+      console.log(this.$route.params.type)
+    } else {
+      this.idType = localStorage.getItem('idType')
+    }
+
     this.id = this.$route.params.id
     this.updateWindowWidth()
     window.addEventListener('resize', this.updateWindowWidth)
