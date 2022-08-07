@@ -1,3 +1,3 @@
-const domain = 'http://localhost:8080/'
+const domain = 'https://arthurnassar.github.io/moviewebsite/'
 
 export default domain
