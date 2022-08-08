@@ -38,6 +38,7 @@
             Por notas mais votadas
           </button>
         </div>
+
         <D3Chart
           v-if="arrayData"
           :width="1000"
@@ -49,6 +50,7 @@
         <div v-if="arrayData">
           <MoviesCarousel
             genreName="Mais votados"
+            :topRated="true"
             :movies="arrayData"
           ></MoviesCarousel>
         </div>
@@ -151,66 +153,18 @@ export default {
       margin: 0;
     }
 
-    .navbar {
-      margin-bottom: min(5%, 200px);
-      & .collapse {
-        position: absolute;
-        z-index: 1;
-        right: 0;
-        width: 200px !important;
-        top: 100px;
-
-        .logout-item {
-          div#collapseExample {
-            position: relative !important;
-            top: 0 !important;
-            width: 100px !important;
-          }
-        }
-      }
-      & .collapsing {
-        position: absolute;
-        z-index: 1;
-        right: 0;
-        width: 200px !important;
-        top: 100px;
-      }
+    button {
+      border-radius: 5px;
     }
 
-    .filme-info {
-      .title-info {
-        .star-container {
-          display: flex;
-          flex-direction: row;
-          gap: 5px;
-          align-items: center;
-
-          p {
-            margin-left: 5px;
-          }
-        }
-      }
+    button.pressed {
+      box-shadow: inset 0px 03px 6px 0px rgba(255, 255, 255, 0.62);
+      background-color: #5c5b5b !important;
+      color: white;
     }
 
-    .movies-container {
-      overflow-y: scroll;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
-  }
-}
-
-@media screen and (min-width: 990px) {
-  main {
-    .navbar {
-      .collapse {
-        position: initial !important;
-      }
-      .collapsing {
-        position: initial !important;
-      }
+    button:active {
+      background: rgba(255, 255, 255, 0.705);
     }
   }
 }

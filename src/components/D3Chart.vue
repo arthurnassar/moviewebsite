@@ -19,9 +19,6 @@
 <script>
 import * as d3 from 'd3'
 
-// import { range } from 'd3'
-// import { max } from 'd3-array'
-
 export default {
   name: 'D3Chart',
   data () {
@@ -38,13 +35,17 @@ export default {
   },
   computed: {},
   methods: {
+    chooseRenderedChart () {
+      if (this.chartId === 'movie') {
+        this.renderMovieChart()
+      } else {
+        this.renderSeriesChart()
+      }
+    },
     renderSeriesChart () {
       this.updateWindowWidth()
       this.updateWindowWidth()
       window.addEventListener('resize', this.updateWindowWidth)
-
-      let scaleY
-      let scaleX
 
       if (this.windowWidth === 'desktop') {
         const svg = d3
@@ -53,11 +54,13 @@ export default {
           .attr('width', 1000)
           .attr('height', 500)
           .attr('viewBox', [0, 0, 1000, 500])
-        scaleY = d3.scaleLinear().domain([0, 10]).range([475, 25])
-        scaleX = d3
+
+        const scaleY = d3.scaleLinear().domain([0, 10]).range([465, 35])
+
+        const scaleX = d3
           .scaleBand()
           .domain(d3.range(10))
-          .range([25, 975])
+          .range([35, 965])
           .padding(0.2)
 
         const Tooltip = d3
@@ -75,6 +78,7 @@ export default {
           Tooltip.style('opacity', 1)
           d3.select(this).style('stroke', 'black').style('opacity', 1)
         }
+
         const mousemove = function (event, d) {
           Tooltip.html(
             `Nome: ${d.name} <br> Nota: ${d.vote_average} <br> Votos: ${d.vote_count}`
@@ -82,10 +86,27 @@ export default {
             .style('left', d3.pointer(event)[0] + window.innerWidth / 7 + 'px')
             .style('top', d3.pointer(event)[1] + 100 + 'px')
         }
+
         const mouseleave = function (d) {
           Tooltip.style('opacity', 0)
           d3.select(this).style('stroke', 'none').style('opacity', 0.8)
         }
+
+        const yAxis = d3
+          .axisLeft()
+          .scale(scaleY)
+          .tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+          .tickFormat((d, i) => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i])
+
+        const xAxis = d3
+          .axisBottom(scaleX)
+          .ticks(10)
+          .tickFormat(
+            (d, i) =>
+              ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º'][i]
+          )
+
+        /// ////////////////////////// RENDERIZANDO AS BARRAS //////////////////////////
 
         svg
           .append('g')
@@ -109,27 +130,37 @@ export default {
           .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
           .attr('y', (d) => scaleY(d.vote_average))
 
-        const yAxis = d3
-          .axisLeft()
-          .scale(scaleY)
-          .tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-          .tickFormat((d, i) => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i])
+        /// ///////////////////////// RENDERIZANDO AS ESCALAS ///////////////////////
 
-        const xAxis = d3
-          .axisBottom(scaleX)
-          .ticks(10)
-          .tickFormat(
-            (d, i) =>
-              ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º'][i]
-          )
-
-        svg.append('g').attr('transform', 'translate(25, 10)').call(yAxis)
+        svg.append('g').attr('transform', 'translate(45, 0)').call(yAxis)
 
         svg
           .append('g')
-          .attr('transform', 'translate(0, 475)')
+          .attr('transform', 'translate(0, 465)')
           .attr('fill', '#FFFFFF')
           .call(xAxis)
+
+        /// ///////////////////////// TITULO DAS ESCALAS ////////////////////////////
+        svg
+          .append('text')
+          .attr('transform', 'rotate(-90)')
+          .attr('y', 0)
+          .attr('x', -465 / 2)
+          .attr('fill', 'white')
+          .attr('dy', '1em')
+          .attr('font-size', '20px')
+          .style('text-anchor', 'middle')
+          .text('Nota')
+
+        svg
+          .append('text')
+          .attr('x', 500)
+          .attr('y', 499)
+          .attr('fill', 'white')
+          .attr('font-size', '20px')
+          .style('text-anchor', 'middle')
+          .text('Posição')
+
         svg.node()
       } else {
         const svg = d3
@@ -138,11 +169,12 @@ export default {
           .attr('width', 310)
           .attr('height', 200)
           .attr('viewBox', [0, 0, 310, 210])
-        scaleY = d3.scaleLinear().domain([0, 10]).range([190, 10])
-        scaleX = d3
+
+        const scaleY = d3.scaleLinear().domain([0, 10]).range([170, 20])
+        const scaleX = d3
           .scaleBand()
           .domain(d3.range(10))
-          .range([10, 300])
+          .range([25, 300])
           .padding(0.2)
 
         const Tooltip = d3
@@ -172,6 +204,22 @@ export default {
           d3.select(this).style('stroke', 'none').style('opacity', 0.8)
         }
 
+        const yAxis = d3
+          .axisLeft()
+          .scale(scaleY)
+          .tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+          .tickFormat((d, i) => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i])
+
+        const xAxis = d3
+          .axisBottom(scaleX)
+          .ticks(10)
+          .tickFormat(
+            (d, i) =>
+              ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º'][i]
+          )
+
+        /// ////////////////////////// RENDERIZANDO AS BARRAS //////////////////////////
+
         svg
           .append('g')
           .attr('fill', '#FF6B00')
@@ -194,27 +242,37 @@ export default {
           .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
           .attr('y', (d) => scaleY(d.vote_average))
 
-        const yAxis = d3
-          .axisLeft()
-          .scale(scaleY)
-          .tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-          .tickFormat((d, i) => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i])
+        /// //////////////////////// RENDERIZANDO AS ESCALAS ///////////////////////
 
-        const xAxis = d3
-          .axisBottom(scaleX)
-          .ticks(10)
-          .tickFormat(
-            (d, i) =>
-              ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º'][i]
-          )
-
-        svg.append('g').attr('transform', 'translate(10, 10)').call(yAxis)
+        svg.append('g').attr('transform', 'translate(25, 0)').call(yAxis)
 
         svg
           .append('g')
-          .attr('transform', 'translate(0, 190)')
+          .attr('transform', 'translate(0, 170)')
           .attr('fill', '#FFFFFF')
           .call(xAxis)
+
+        /// //////////////////////// TITULO DAS ESCALAS //////////////////
+        svg
+          .append('text')
+          .attr('transform', 'rotate(-90)')
+          .attr('y', -13)
+          .attr('x', -180 / 2)
+          .attr('fill', 'white')
+          .attr('dy', '1em')
+          .attr('font-size', '16px')
+          .style('text-anchor', 'middle')
+          .text('Nota')
+
+        svg
+          .append('text')
+          .attr('x', 150)
+          .attr('y', 205)
+          .attr('fill', 'white')
+          .attr('font-size', '16px')
+          .style('text-anchor', 'middle')
+          .text('Posição')
+
         svg.node()
       }
     },
@@ -223,9 +281,6 @@ export default {
       this.updateWindowWidth()
       window.addEventListener('resize', this.updateWindowWidth)
 
-      let scaleY
-      let scaleX
-
       if (this.windowWidth === 'desktop') {
         const svg = d3
           .select('#chartContainer')
@@ -233,11 +288,11 @@ export default {
           .attr('width', 1000)
           .attr('height', 500)
           .attr('viewBox', [0, 0, 1000, 500])
-        scaleY = d3.scaleLinear().domain([0, 10]).range([475, 25])
-        scaleX = d3
+        const scaleY = d3.scaleLinear().domain([0, 10]).range([465, 35])
+        const scaleX = d3
           .scaleBand()
           .domain(d3.range(10))
-          .range([25, 975])
+          .range([35, 965])
           .padding(0.2)
 
         const Tooltip = d3
@@ -267,6 +322,22 @@ export default {
           d3.select(this).style('stroke', 'none').style('opacity', 0.8)
         }
 
+        const yAxis = d3
+          .axisLeft()
+          .scale(scaleY)
+          .tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+          .tickFormat((d, i) => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i])
+
+        const xAxis = d3
+          .axisBottom(scaleX)
+          .ticks(10)
+          .tickFormat(
+            (d, i) =>
+              ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º'][i]
+          )
+
+        /// ////////////////////////// RENDERIZANDO AS BARRAS //////////////////////////
+
         svg
           .append('g')
           .attr('fill', '#FF6B00')
@@ -289,27 +360,38 @@ export default {
           .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
           .attr('y', (d) => scaleY(d.vote_average))
 
-        const yAxis = d3
-          .axisLeft()
-          .scale(scaleY)
-          .tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-          .tickFormat((d, i) => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i])
+        /// //////////////////////// RENDERIZANDO AS ESCALAS ///////////////////////
 
-        const xAxis = d3
-          .axisBottom(scaleX)
-          .ticks(10)
-          .tickFormat(
-            (d, i) =>
-              ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º'][i]
-          )
-
-        svg.append('g').attr('transform', 'translate(25, 10)').call(yAxis)
+        svg.append('g').attr('transform', 'translate(45, 0)').call(yAxis)
 
         svg
           .append('g')
-          .attr('transform', 'translate(0, 475)')
+          .attr('transform', 'translate(0, 465)')
           .attr('fill', '#FFFFFF')
           .call(xAxis)
+
+        /// //////////////////////// TITULO DAS ESCALAS //////////////////
+
+        svg
+          .append('text')
+          .attr('transform', 'rotate(-90)')
+          .attr('y', 0)
+          .attr('x', -465 / 2)
+          .attr('fill', 'white')
+          .attr('dy', '1em')
+          .attr('font-size', '20px')
+          .style('text-anchor', 'middle')
+          .text('Nota')
+
+        svg
+          .append('text')
+          .attr('x', 500)
+          .attr('y', 499)
+          .attr('fill', 'white')
+          .attr('font-size', '20px')
+          .style('text-anchor', 'middle')
+          .text('Posição')
+
         svg.node()
       } else {
         const svg = d3
@@ -318,11 +400,12 @@ export default {
           .attr('width', 310)
           .attr('height', 200)
           .attr('viewBox', [0, 0, 310, 210])
-        scaleY = d3.scaleLinear().domain([0, 10]).range([190, 10])
-        scaleX = d3
+
+        const scaleY = d3.scaleLinear().domain([0, 10]).range([170, 20])
+        const scaleX = d3
           .scaleBand()
           .domain(d3.range(10))
-          .range([10, 290])
+          .range([25, 300])
           .padding(0.2)
 
         const Tooltip = d3
@@ -345,12 +428,28 @@ export default {
             `Nome: ${d.title} <br> Nota: ${d.vote_average} <br> Votos: ${d.vote_count}`
           )
             .style('left', d3.pointer(event)[0] + 'px')
-            .style('top', d3.pointer(event)[1] + 'px')
+            .style('top', d3.pointer(event)[1] + 100 + 'px')
         }
         const mouseleave = function (d) {
           Tooltip.style('opacity', 0)
           d3.select(this).style('stroke', 'none').style('opacity', 0.8)
         }
+
+        const yAxis = d3
+          .axisLeft()
+          .scale(scaleY)
+          .tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+          .tickFormat((d, i) => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i])
+
+        const xAxis = d3
+          .axisBottom(scaleX)
+          .ticks(10)
+          .tickFormat(
+            (d, i) =>
+              ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º'][i]
+          )
+
+        /// ////////////////////////// RENDERIZANDO AS BARRAS //////////////////////////
 
         svg
           .append('g')
@@ -374,27 +473,37 @@ export default {
           .attr('height', (d) => scaleY(0) - scaleY(d.vote_average))
           .attr('y', (d) => scaleY(d.vote_average))
 
-        const yAxis = d3
-          .axisLeft()
-          .scale(scaleY)
-          .tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-          .tickFormat((d, i) => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i])
+        /// //////////////////////// RENDERIZANDO AS ESCALAS ///////////////////////
 
-        const xAxis = d3
-          .axisBottom(scaleX)
-          .ticks(10)
-          .tickFormat(
-            (d, i) =>
-              ['1º', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º'][i]
-          )
-
-        svg.append('g').attr('transform', 'translate(10, 10)').call(yAxis)
+        svg.append('g').attr('transform', 'translate(25, 0)').call(yAxis)
 
         svg
           .append('g')
-          .attr('transform', 'translate(0, 190)')
+          .attr('transform', 'translate(0, 170)')
           .attr('fill', '#FFFFFF')
           .call(xAxis)
+
+        /// //////////////////////// TITULO DAS ESCALAS //////////////////
+        svg
+          .append('text')
+          .attr('transform', 'rotate(-90)')
+          .attr('y', -13)
+          .attr('x', -180 / 2)
+          .attr('fill', 'white')
+          .attr('dy', '1em')
+          .attr('font-size', '16px')
+          .style('text-anchor', 'middle')
+          .text('Nota')
+
+        svg
+          .append('text')
+          .attr('x', 150)
+          .attr('y', 205)
+          .attr('fill', 'white')
+          .attr('font-size', '16px')
+          .style('text-anchor', 'middle')
+          .text('Posição')
+
         svg.node()
       }
     },
@@ -404,24 +513,17 @@ export default {
       } else {
         this.windowWidth = 'mobile'
       }
+    },
+    removeSvg () {
+      d3.select('#chartContainer').select('svg').remove()
     }
   },
   updated () {
-    d3.select('#chartContainer').select('svg').remove()
-    console.log(this.arrayData)
-
-    if (this.chartId === 'movie') {
-      this.renderMovieChart()
-    } else {
-      this.renderSeriesChart()
-    }
+    this.removeSvg()
+    this.chooseRenderedChart()
   },
   mounted () {
-    if (this.chartId === 'movie') {
-      this.renderMovieChart()
-    } else {
-      this.renderSeriesChart()
-    }
+    this.chooseRenderedChart()
   }
 }
 </script>

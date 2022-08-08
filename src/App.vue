@@ -16,8 +16,14 @@ export default {
 #app {
   background: #0d0d0d;
   padding-bottom: 20px;
+  overflow-y: scroll;
+  height: 100vh;
   NavBar {
     position: static;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 </style>

@@ -2,25 +2,37 @@
   <div class="app">
     <template v-if="details">
       <div class="card">
-        <div class="card-info">
+        <div v-if="budget" class="card-info">
           <p>
             <strong>Orçamento</strong>
           </p>
           <p>{{ returnBudget }}</p>
         </div>
-        <div class="card-info">
+        <div v-else class="card-info">
+          <p>
+            <strong>Status</strong>
+          </p>
+          <p>{{ status }}</p>
+        </div>
+        <div v-if="revenue" class="card-info">
           <p>
             <strong>Rendimento</strong>
           </p>
           <p>{{ returnRevenue }}</p>
         </div>
+        <div v-else>
+          <p>
+            <strong>Ultima temporada</strong>
+          </p>
+          <p class="text-center">{{ seasons }}</p>
+        </div>
         <div class="card-info">
           <p>
             <strong>Título Original</strong>
           </p>
-          <p>Thor: Love and Thunder</p>
+          <p>{{ originalTitle }}</p>
         </div>
-        <div class="card-info">
+        <div v-if="launchDate" class="card-info">
           <p>
             <strong>Data de Lançamento</strong>
           </p>
@@ -61,7 +73,9 @@ export default {
     launchDate: String,
     studiosList: Array,
     details: Boolean,
-    studios: Boolean
+    studios: Boolean,
+    seasons: Array,
+    status: String
   },
   methods: {
     formatToUSD (number) {

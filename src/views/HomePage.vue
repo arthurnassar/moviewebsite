@@ -40,13 +40,20 @@
           >
         </div>
 
-        <div class="movies-container">
+        <FiltrarItens
+          @filtro-ativado="filtrarFilmes"
+          :idType="'movie'"
+        ></FiltrarItens>
+
+        <div v-if="renderComponent" class="movies-container">
           <MoviesCarousel
+            :isLoading="isLoading"
             @filme-selecionado="selecionarFilme($event)"
             v-for="movie in movies"
             :key="movie.id"
             :genreName="movie.name"
             :movies="movie.movies.results"
+            :topRated="false"
           ></MoviesCarousel>
         </div>
       </section>
@@ -60,13 +67,15 @@ import router from '@/router'
 import axios from 'axios'
 import MoviesCarousel from '@/components/MoviesCarousel.vue'
 import StarRating from '@/components/StarRating.vue'
+import FiltrarItens from '@/components/FiltrarItens.vue'
 
 export default {
   name: 'HomeView',
   components: {
     NavBar,
     MoviesCarousel,
-    StarRating
+    StarRating,
+    FiltrarItens
   },
   data () {
     return {
@@ -74,7 +83,9 @@ export default {
       genres: null,
       movies: [],
       selectedMovie: undefined,
-      windowWidth: ''
+      windowWidth: '',
+      isLoading: true,
+      renderComponent: true
     }
   },
   computed: {
@@ -95,7 +106,6 @@ export default {
         return ''
       }
     },
-
     returnBackground () {
       return ` linear-gradient(to bottom, rgba(0, 0, 0, 0.76), rgba(0, 0, 0, 0.76)),
     url(https://image.tmdb.org/t/p/original${this.poster})`
@@ -103,10 +113,21 @@ export default {
   },
   watch: {
     genres () {
-      this.getMoviesByGenre(this.genres, this.counter)
+      this.getMoviesByGenre(this.genres)
     }
   },
   methods: {
+    filtrarFilmes (event) {
+      this.movies = event
+      const movie = event[0].movies.results[0]
+      this.selectedMovie = movie
+
+      if (this.windowWidth === 'mobile') {
+        this.poster = movie.poster_path
+      } else if (this.windowWidth === 'desktop') {
+        this.poster = movie.backdrop_path
+      }
+    },
     handleSearch (event) {
       const movie = event[0].movies.results[0]
       if (event[0].movies.results.length !== 0) {
@@ -117,6 +138,12 @@ export default {
         } else if (this.windowWidth === 'desktop') {
           this.poster = movie.backdrop_path
         }
+        this.renderComponent = false
+
+        this.$nextTick(() => {
+          // Adding the component back in
+          this.renderComponent = true
+        })
       }
     },
     selecionarFilme (event) {
@@ -191,6 +218,9 @@ export default {
         } else if (this.windowWidth === 'desktop') {
           this.poster = movie.backdrop_path
         }
+        setTimeout(() => {
+          this.isLoading = false
+        }, 3000)
       })
     },
     updateWindowWidth () {

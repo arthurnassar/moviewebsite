@@ -18,8 +18,19 @@
         @mousedown="slide($event)"
         @touchstart="slideMobile($event)"
       >
-        <template v-if="movies">
+        <template v-if="movies && !topRated">
           <MovieCards
+            :isLoading="isLoading"
+            v-for="movie in renderedMovies"
+            :key="movie.id"
+            :poster="movie.poster_path"
+            :movieName="movie.title"
+            @mousedown="selectedMovie = movie"
+          ></MovieCards>
+        </template>
+        <template v-if="movies && topRated">
+          <MovieCards
+            :isLoading="isLoading"
             v-for="movie in movies"
             :key="movie.id"
             :poster="movie.poster_path"
@@ -29,7 +40,7 @@
         </template>
         <template v-else-if="crew">
           <MovieCards
-            class="loading"
+            :isLoading="isLoading"
             v-for="member in crew"
             :key="member.id"
             :poster="member.profile_path"
@@ -50,7 +61,20 @@ export default {
   props: {
     movies: Array,
     genreName: String,
-    crew: Array
+    crew: Array,
+    isLoading: Boolean,
+    topRated: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      selectedMovie: null,
+      sliderPosition: undefined,
+      renderedMovies: [],
+      counter: 8
+    }
   },
   components: {
     MovieCards
@@ -80,6 +104,7 @@ export default {
           innerSlider.offsetLeft <
           wrapperSlider.offsetWidth - innerSlider.offsetWidth - 52
         ) {
+          this.loadMovies()
           innerSlider.classList.add('smooth')
           innerSlider.style.right = `${
             innerSlider.offsetWidth - wrapperSlider.offsetWidth
@@ -142,13 +167,23 @@ export default {
           }, 1000)
         }
       })
+    },
+    loadMovies () {
+      const temp = []
+      for (let i = 0; i < this.counter; i++) {
+        temp.push(this.movies[i])
+      }
+      this.renderedMovies = temp
+      if (this.counter < 16) {
+        this.counter += 8
+      } else if (this.counter >= 6 && this.counter < 20) {
+        const addNum = 20 - this.counter
+        this.counter += addNum
+      }
     }
   },
-  data () {
-    return {
-      selectedMovie: null,
-      sliderPosition: undefined
-    }
+  mounted () {
+    this.loadMovies()
   }
 }
 </script>

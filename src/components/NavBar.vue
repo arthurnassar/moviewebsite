@@ -58,13 +58,13 @@
             </form>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="/"> Filmes </a>
+            <router-link class="nav-link" to="/"> Filmes </router-link>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="/series"> Séries </a>
+            <router-link class="nav-link" to="/series"> Séries </router-link>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="/status"> Status </a>
+            <router-link class="nav-link" to="/status"> Status </router-link>
           </li>
           <li class="nav-item active logout-item">
             <a
@@ -116,13 +116,14 @@ import axios from 'axios'
 
 export default {
   name: 'NavBar',
+  props: {
+    noSearch: Boolean,
+    idType: String
+  },
   data () {
     return {
       searchedMovies: null
     }
-  },
-  props: {
-    noSearch: Boolean
   },
   watch: {
     searchedMovies () {
@@ -136,23 +137,43 @@ export default {
       const searchedValueUpperCase =
         uppercaseLetter + searchedValue.split('').splice(1).join('')
       if (searchedValue) {
-        const self = this
-        axios
-          .get(
-            `https://api.themoviedb.org/3/search/movie?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&language=pt-BR&query=${searchedValue}&page=1&include_adult=false`
-          )
-          .then(function (response) {
-            self.searchedMovies = [
-              {
-                id: 'searched',
-                name: `${searchedValueUpperCase}`,
-                movies: response.data
-              }
-            ]
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+        if (this.idType === 'tv') {
+          const self = this
+          axios
+            .get(
+              `https://api.themoviedb.org/3/search/tv?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&language=pt-BR&query=${searchedValue}&page=1&include_adult=false`
+            )
+            .then(function (response) {
+              self.searchedMovies = [
+                {
+                  id: 'searched',
+                  name: `${searchedValueUpperCase}`,
+                  movies: response.data
+                }
+              ]
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        } else {
+          const self = this
+          axios
+            .get(
+              `https://api.themoviedb.org/3/search/movie?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&language=pt-BR&query=${searchedValue}&page=1&include_adult=false`
+            )
+            .then(function (response) {
+              self.searchedMovies = [
+                {
+                  id: 'searched',
+                  name: `${searchedValueUpperCase}`,
+                  movies: response.data
+                }
+              ]
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
       }
     },
     logOut () {
@@ -223,6 +244,14 @@ nav {
     &.router-link-exact-active {
       font-weight: 700;
     }
+  }
+}
+
+.navbar-collapse.collapse.show {
+  .navbar-nav.mr-auto {
+    background: black;
+    padding: 10px;
+    border-radius: 5px;
   }
 }
 </style>

@@ -39,6 +39,15 @@
           </div>
 
           <InfoCard
+            v-if="idType === 'tv'"
+            :details="true"
+            :status="selectedMovie.status"
+            :seasons="returnSeason"
+            :launchDate="selectedMovie.first_air_date"
+            :originalTitle="selectedMovie.original_name"
+          ></InfoCard>
+          <InfoCard
+            v-else
             :budget="selectedMovie.budget"
             :details="true"
             :launchDate="selectedMovie.release_date"
@@ -69,7 +78,13 @@
           ></MoviesCarousel>
         </template>
 
-        <ReviewSection></ReviewSection>
+        <MoviesCarousel
+          v-if="movies"
+          :genreName="'Filmes recomendados'"
+          :movies="movies"
+        ></MoviesCarousel>
+
+        <ReviewSection :reviews="reviews"></ReviewSection>
       </section>
     </main>
   </div>
@@ -106,7 +121,9 @@ export default {
       cast: null,
       crewTitles: null,
       detailImage: null,
-      site: ''
+      site: '',
+      movies: null,
+      reviews: null
     }
   },
   watch: {
@@ -117,6 +134,10 @@ export default {
     }
   },
   computed: {
+    returnSeason () {
+      return this.selectedMovie.seasons[this.selectedMovie.seasons.length - 1]
+        .name
+    },
     returnCrewTitlesUppercase () {
       const result = this.crewTitles.map((item) => {
         const uppercaseLetter = item.split('').shift().toUpperCase()
@@ -133,6 +154,34 @@ export default {
     }
   },
   methods: {
+    getReviews () {
+      const self = this
+      axios
+        .get(
+          `https://api.themoviedb.org/3/${this.idType}/${this.id}/reviews?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&page=1`
+        )
+        .then(function (response) {
+          self.reviews = response.data.results
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    getRecommendations () {
+      const self = this
+      axios
+        .get(
+          `https://api.themoviedb.org/3/${this.idType}/${this.id}/recommendations?api_key=3c78ca8d7c3707902d0ca0cbb06c2d91&page=1`
+        )
+        .then(function (response) {
+          const temp = [...response.data.results]
+          self.movies = temp
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
     getCredits () {
       const self = this
       const result = []
@@ -309,6 +358,8 @@ export default {
     this.id = this.$route.params.id
     this.updateWindowWidth()
     window.addEventListener('resize', this.updateWindowWidth)
+    this.getRecommendations()
+    this.getReviews()
   }
 }
 </script>
@@ -329,36 +380,10 @@ export default {
       margin: 0;
     }
 
-    .navbar {
-      margin-bottom: min(5%, 200px);
-      & .collapse {
-        position: absolute;
-        z-index: 1;
-        right: 0;
-        width: 200px !important;
-        top: 100px;
-
-        .logout-item {
-          div#collapseExample {
-            position: relative !important;
-            top: 0 !important;
-            width: 100px !important;
-          }
-        }
-      }
-      & .collapsing {
-        position: absolute;
-        z-index: 1;
-        right: 0;
-        width: 200px !important;
-        top: 100px;
-      }
-    }
-
     .filme-info {
       display: flex;
       flex-direction: column;
-      height: 500px;
+      max-height: 800px;
       overflow-y: scroll;
 
       &::-webkit-scrollbar {
