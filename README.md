@@ -13,8 +13,8 @@
   - [What I learned](#what-i-learned)
 - [Author](#author)
 - [Screenshot](#screenshot)
-  -[Desktop](#desktop)
-  -[Mobile](#Mobile)
+  - [Desktop](#desktop)
+  - [Mobile](#mobile)
 
 ## Overview
 
