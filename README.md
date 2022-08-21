@@ -11,9 +11,7 @@
 - [My process](#my-process)
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
-  - [Useful resources](#useful-resources)
 - [Author](#author)
-- [Acknowledgments](#acknowledgments)
 - [Screenshot](#screenshot)
   -[Desktop](#desktop)
   -[Mobile](#Mobile)
@@ -22,7 +20,7 @@
 
 ### The challenge
 
-Using an existing Movie API (~https:// )~ [www.themoviedb.org/documentation/api) ](http://www.themoviedb.org/documentation/api) provided by The Movie DB, create a website using Vue, Vuex and LESS/SASS with the following functionalities:
+Using an existing Movie API [The movie DB API](http://www.themoviedb.org/documentation/api) provided by The Movie DB, create a website using Vue, Vuex and LESS/SASS with the following functionalities:
 
 #### Home Page
 	1. Display all movies
@@ -42,7 +40,7 @@ Using an existing Movie API (~https:// )~ [www.themoviedb.org/documentation/api)
 ### Links
 
 
-- Live Site URL: [Live](https://arthurnassar.github.io/moviewebsite/)
+- Live Site URL: [MOVIER](https://arthurnassar.github.io/moviewebsite/)
 
 ## My process
 
@@ -52,61 +50,27 @@ Using an existing Movie API (~https:// )~ [www.themoviedb.org/documentation/api)
 ![image](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![image](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white)
 ![image](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
-![image](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)
 ![image](https://img.shields.io/badge/d3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white)
+![image](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)
 ![image](https://badgen.net/badge/label/VUE%20ROUTER/41B883?&label)
-![image](https://badgen.net/badge/icon/VUEX/41B883?icon=zeit&label)
+![image](https://badgen.net/badge/label/VUEX/41B883?&label)
 
 ### What I learned
 
-Use this section to recap over some of your major learnings while working through this project. Writing these out and providing code samples of areas you want to highlight is a great way to reinforce your own knowledge.
-
-#### Skills
-
-##### ![HTML](./screenshots/icons/html.png) HTML
-I've reinforced my basic skills of HTML and got a better understanding of the semantic tags
-
-##### ![CSS](./screenshots/icons/css3.png) CSS
-With this project I was able to retake my previous knowledge of CSS, and get a better grasp of the basics as well as train my capacity to do responsive contents.
-I also learned about the new max(), min() and clamp() functions to implement on my next projects.
-
-##### ![JS](./screenshots/icons/javascript.png) Javascript
-Most of my time I spent doing the Javascript work... I learned a lot with this project because I had to do most of the JSON handling with Js functions in my Vue methods.
-
-##### ![BOOTSTRAP](./screenshots/icons/bootstrap.png) [Bootstrap](https://getbootstrap.com/)
-In this project I was able to get a better understanding about the responsive grid that bootstrap offers. I had the opportunity to use Bootstrap components too, like the Offcanvas component.
-
-##### ![SASS](./screenshots/icons/sass.png) [Sass](https://sass-lang.com)
-In this project after almost all the CSS part was over I challenged myself to refactor some of the CSS using the SASS, to achieve this I had to actually learn it because it was unknown territory to me.
-I can only say that I'm amazed by the strength that this tool offers. I was able to create all the typography and base colors of the project in a dinamic way using @mixins and @each loops through arrays of variables.
-
-##### ![VUEJS](./screenshots/icons/vue.png) [Vuejs](https://vuejs.org/) 
-I've been studying this framework for about 2 months now... And in this project I felt that I used it up to it's potential. 
-In this project I were able to solidify my foundations and get a better understanding about how to use all the reactivity with data handling, computed properties and methods to display reactive components with interpolations.
-
-##### [Vue Router](https://router.vuejs.org/) Vue Router
-With the Vue router I had to do a lot of researchs because of some problems that I had when setting my routes, but I were able to easly fix them with a peek in the documentation, in the process I passed through some things that, despite not using in this project, will be very helpful in specific cases.
-
-##### ![JSON](./screenshots/icons/file.png) JSON Files
-The JSON handling methods that I learned with this project will be fundamental to my ability to handle DB requests. I already had some experience in the area, but with this project I solidified my knowledges.
-
-
-### Useful resources
-
-I've learned so many things in this project, but unfortunatelly I didn't get the URLs, but I can highlight our old friends Google and Youtube and the Stack Overflow community that helped me a lot through this journey.
+With this project I improved my API endpoints usage. I improved my ability to manipulate the information received and display it on the pages and
+learned how to use D3.js to build dinamic charts.
 
 
 ## Author
 
-- [Github](https://github.com/arthurnassar)
-- [Linkedin ](https://www.linkedin.com/in/arthur-andr%C3%A9-nassar-becker-barbosa-92b511231/)
-- [Frontend Mentor](https://www.frontendmentor.io/profile/arthurnassar)
+- [![image](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/arthurnassar)
+- [![image](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/arthurnassar/)
 
-
-## Acknowledgments
 
 ## Screenshot
 
 ### Desktop
+Soon
 
 ### Mobile
+Soon
